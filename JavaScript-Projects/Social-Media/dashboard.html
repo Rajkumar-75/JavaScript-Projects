@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .card {
+            border: 2px solid #ccc;
+            padding:10px;
+            margin: 10px;
+            width: 31%;
+            display: inline-block;
+            animation: fadeIn 0.5s ease-in-out;
+            background-color: transparent;
+            backdrop-filter: blur(50px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add hover effect to the card */
+        .card:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card img {
+            width: 98%;
+            text-align: center;
+            height: auto;
+            margin-bottom: 20px;
+            /* object-fit: cover; */
+        }
+
+        .card h6 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card button {
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .card button:hover {
+            background-color: #2980b9;
+        }
+
+        .comment-input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .profileimg {
+            height: 70px;
+            width: 70px;
+            border-radius: 100%;
+            border:2px solid white;
+            margin: 20px 20px 30px 40px;
+        }
+        body{
+            background-image: url(imgs/3135763.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: fixed;
+            padding: 10px 30px 0px 30px;
+        }
+        .post-btn:hover{
+            background-color: green;
+            border: #333;
+
+        }
+        /* file input */
+        #fileInput {
+      display: none; /* Hide the default file input */
+    }
+
+    .custom-file-input {
+      display: inline-block;
+      padding: 8px 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 1.5;
+      color: #000;
+      background-color: blueviolet;
+      border: 2px solid #ced4da;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .custom-file-input:hover {
+      background-color: #e9ecef;
+    }
+
+    .custom-file-input:focus {
+      border-color: #80bdff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    .model-bg{
+        background-image:url(imgs/red-light-round-podium-black-background-mock-up.jpg);
+        background-size: cover;
+        color: white;
+    }
+       
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container-fluid ">
+        <img id="profile" class="profileimg" alt="Profile Image">
+
+        <a class="btn btn-danger btn-sm fw-bold px-2 py-2 float-end mx-3 mt-4" href="register.html">
+            &#x1F6AA; Logout 
+        </a>
+
+        <button type="button" class="post-btn btn btn-info btn-sm fw-bold px-4 py-2 float-end  mt-4" data-bs-toggle="modal"
+            data-bs-target="#myModal">
+            POST
+        </button>
+    </div>
+    <div class="container">
+        <div class="col-12">
+            <div id="profileInfo">
+            </div>
+
+        </div>
+
+        <!-- The Modal -->
+        <div class="modal fade " id="myModal" >
+            <div class="modal-dialog ">
+                <div class="modal-content model-bg">
+                    <!-- Modal Header -->
+                    <div class="modal-header ps-5 mb-3" style="border: none;">
+                        <h3 class="modal-title  mx-auto ">UPLOAD POST</h3>
+                        <button type="button" class="btn-close text-danger" data-bs-dismiss="modal"></button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body" style="border: none;">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="fileInput" class="custom-file-input">Choose File</label>
+                                <input type="file" id="fileInput">
+                              </div>
+                            <div class="mb-3 mt-3">
+                                <label for="comment" class="fw-bold">Description:</label>
+                                <textarea class="form-control border border-2 border-dark" style="background-color: transparent;" rows="5" id="description" name="text"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer" style="border: none;">
+                        <button id="submit" class="btn btn-primary">UPLOAD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="photosContainer"></div>
+
+
+    <script>
+        function checkLoggedIn() {
+            var username = sessionStorage.getItem('username');
+
+            if (!username) {
+                alert('You need to log in first.');
+                window.location.href = "login.html";
+            }
+        }
+
+        //Geting localstorage image :
+        const UserDataString = localStorage.getItem('UserData');
+
+        if (UserDataString) {
+            const UserData = JSON.parse(UserDataString);
+            var photo = document.getElementById('profile');
+            photo.src = UserData.profileImage;
+        }
+
+        checkLoggedIn();
+
+        var fileInput = document.getElementById('fileInput');
+        var photosContainer = document.getElementById('photosContainer');
+        var uploadButton = document.getElementById('submit');
+        var descriptionInput = document.getElementById('description');
+        var updatedPhotos = [];
+
+        function createCard(dataUrl, description) {
+            var card = document.createElement('div');
+            card.className = 'card';
+
+            var photo = document.createElement('img');
+            photo.src = dataUrl;
+            photo.className = 'postPhoto';
+            photo.style.width='350px';
+            photo.style.height='400px';
+            card.appendChild(photo);
+
+            //Discription :
+
+            var descriptionElement = document.createElement('h6');
+            descriptionElement.innerHTML = descriptionInput.value;
+            card.appendChild(descriptionElement);
+
+            // commant
+            var displaycommant = document.createElement('h6');
+            displaycommant.innerHTML = description;
+            card.appendChild(displaycommant);
+
+            // Like button
+            var likeButton = document.createElement('button');
+            likeButton.innerHTML = "&#x2661";
+            likeButton.style.backgroundColor = '#F72798';
+            var likeCount = 0;
+
+            likeButton.addEventListener('click', function () {
+            likeCount++;
+            updateLikeCount();
+            });
+
+            // Double-click to unlike
+            likeButton.addEventListener('dblclick', function () {
+                if (likeCount > 0) {
+                    likeCount--;
+                    updateLikeCount();
+                }
+            });
+
+            function updateLikeCount() {
+                likeButton.innerHTML = `&#x2661; ${likeCount}`;
+            }
+            card.appendChild(likeButton);
+             
+            // Delete button
+            var deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '&#x1F5D1';
+            deleteButton.style.float = 'right';
+            deleteButton.style.backgroundColor = 'red';
+            deleteButton.addEventListener('click', function () {
+             photosContainer.removeChild(card);
+            });
+            card.appendChild(deleteButton);
+
+            // Comment button
+            var commentButton = document.createElement('button');
+            commentButton.innerHTML = '&#x1F4AC';
+            commentButton.style.float = "right"
+
+            commentButton.addEventListener('click', function () {
+            var commentTextArea = document.createElement('textarea');
+            commentTextArea.placeholder = 'Enter your comment';
+            commentTextArea.className = 'comment-input';
+
+            var submitCommentButton = document.createElement('button');
+            submitCommentButton.innerHTML = '&#x1F4E8';
+
+            submitCommentButton.addEventListener('click', function () {
+            var commentText = commentTextArea.value;
+            });
+
+            submitCommentButton.addEventListener('click', function () {
+            var commentText = commentTextArea.value.trim(); // Get the trimmed value
+
+            if (commentText === '') {
+                alert("Invalid: Comment cannot be empty");
+            } else {
+                 displaycommant.innerHTML = "Comments :" + commentText;
+                 submitCommentButton.style.display = 'none';
+                 commentTextArea.value=" ";
+                 commentTextArea.style.display = 'none'
+                
+            }
+                });
+
+            card.appendChild(commentTextArea);
+            card.appendChild(submitCommentButton);
+            });
+
+            card.appendChild(commentButton);
+
+            // Append the card
+            photosContainer.appendChild(card);
+        }
+
+        
+
+        uploadButton.addEventListener('click', function () {
+
+            var selectedFile = fileInput.files[0];
+            if (selectedFile) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var dataUrl = e.target.result;
+                    var description = descriptionInput.value;
+                    updatedPhotos.push({ url: dataUrl, description: description });
+
+                    createCard(dataUrl, description);
+                };
+
+                reader.readAsDataURL(selectedFile);
+            }
+            
+            else {
+                alert('Please select a file.');
+            }
+          
+
+            // Reset input values
+            fileInput.value = '';
+            descriptionInput.value = '';
+        });
+    </script>
+
+</body>
+
+</html>

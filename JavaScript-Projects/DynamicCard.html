@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Dynamic Card</title>
+
+    <style>
+        .card {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            width: 400px;
+            display: inline-block;
+
+        }
+
+        .card img {
+            width: 300px;
+            height: 300px;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-radius: 100%;
+            border: 5px solid black;
+        }
+
+        .center-text {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="col-5 bg-white mx-auto my-5 border border-3 rounded-3 py-4 px-3">
+        <h1 class="text-center">Dynamic Form</h1><br>
+
+        <form id="form">
+
+            <label for="" class="fw-bold">Name</label><br>
+            <input type="text" name="" id="Name" class="py-2 fw-bold my-2  w-75 ps-2" placeholder="Enter Title"
+                required>
+
+            <input type="file" id="Image" name="image" class="fw-bold my-2  w-75 " required><br>
+
+            <label for="" class="fw-bold my-2">Enter Price</label><br>
+            <input type="number" name="" maxlength="10" id="Price" class="my-3 py-2  fw-bold  w-75 ps-2"
+                placeholder="Enter Price" required><br>
+
+            <label for="" class="fw-bold">Discount Price</label><br>
+            <input type="number" name="" id="DiscountPrice" class="my-3 py-2 w-75 fw-bold ps-2"
+                placeholder="Offer Price" required><br>
+
+            <button type="submit" id="submit" class="btn btn-success px-5 fw-bold text-center">SUBMIT</button>
+        </form>
+
+    </div>
+    <script>
+        submit.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            var name = document.getElementById('Name').value;
+            var imageInput = document.getElementById('Image');
+            var price = document.getElementById('Price').value;
+            var discountPrice = document.getElementById('DiscountPrice').value;
+
+            if (name === '' || price === '' || imageInput.value === '' || discountPrice === '') {
+                alert('Please fill in all fields with correct data');
+                return;
+            }
+
+            // Create card element
+            var card = document.createElement('div');
+            card.className = 'card';
+
+            // Title
+            var h1 = document.createElement('h1');
+            h1.innerHTML = name;
+            h1.classList.add("center-text");
+            card.appendChild(h1);
+
+            // Image
+            var imageUpdate = document.createElement('img');
+            var files = new FileReader();
+            files.onload = function (event) {
+                imageUpdate.src = event.target.result;
+            };
+            files.onerror = function (event) {
+                console.error('Error reading the file:', event.target.error);
+            };
+            if (imageInput.files && imageInput.files[0]) {
+                files.readAsDataURL(imageInput.files[0]);
+            }
+            card.appendChild(imageUpdate);
+
+            // Price
+            var pricePara = document.createElement('p');
+            pricePara.innerHTML = `Price : ₹ <del> ${price} </del>`;
+            card.appendChild(pricePara);
+
+            // Discount
+            var discountTag = document.createElement('p');
+            discountTag.innerHTML = `Discount :  ₹  <b>${discountPrice}</b>`;
+            card.appendChild(discountTag);
+
+            // Append card to body
+            document.body.appendChild(card);
+
+            // Reset form
+            document.getElementById("form").reset();
+
+            // Retrieve existing cards from local storage
+            var cardsArray = JSON.parse(localStorage.getItem('cards')) || [];
+
+            // Create a new card object
+            var newCard = {
+                name: name,
+                image: imageUpdate.src,
+                price: price,
+                discountPrice: discountPrice
+            };
+
+            // Add the new card to the array
+            cardsArray.push(newCard);
+
+            // Save the updated array back to local storage
+            localStorage.setItem('cards', JSON.stringify(cardsArray));
+
+
+            var div= document.createElement('div');
+            docu
+         });
+
+    </script>
+</body>
+
+</html>

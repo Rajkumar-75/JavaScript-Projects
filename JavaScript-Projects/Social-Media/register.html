@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Registration Form</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 400px;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 50px;
+            animation: fadeInUp 0.5s ease-out;
+            /* Fade-in and slide-up animation */
+        }
+
+        .form-container h2 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #00b306;
+            border: 1px solid #0fb300;
+            color: black;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #004080;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="col-12">
+            <form class="form-container">
+                <h2 class="mb-4 text-dark">Registration Form</h2>
+
+                <div class="mb-2">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                </div>
+
+                <div class="mb-3">
+                    <label for="pwd" class="form-label">Password:</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password" name="pswd">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cpassword" class="form-label">Confirm Password:</label>
+                    <input type="password" class="form-control" id="cpassword" placeholder="Enter confirm password"
+                        name="confirmPassword">
+                </div>
+
+                <div class="mb-3">
+                    <label for="profileImage" class="form-label">Profile Image:</label>
+                    <input type="file" class="form-control" id="profileImage" accept="image/*" name="profileImage">
+                </div>
+
+                <button type="button" onclick="formvalidate()" class="btn btn-primary">Submit</button>
+                <a href="login.html">Login</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function formvalidate() {
+            var Name = document.getElementById("name").value;
+            var Email = document.getElementById("email").value;
+            var Password = document.getElementById("password").value;
+            var confirmpassword = document.getElementById("cpassword").value;
+            var profileImage = document.getElementById("profileImage").files[0];
+
+            // Check if the user already exists in localStorage
+            var existingUserData = localStorage.getItem('UserData');
+            if (existingUserData) {
+                var existingUser = JSON.parse(existingUserData);
+                if (existingUser.email === Email) {
+                    alert('User with this email already exists. Please use a different email.');
+                    return;
+                }
+            }
+
+            if (Name === '' || Email === '' || Password === '' || confirmpassword === '' || profileImage === '') {
+                alert('Please fill in all Fields');
+            } else if (Password !== confirmpassword) {
+                alert('Please Check the password');
+            } else {
+                const UserData = {
+                    name: Name,
+                    email: Email,
+                    password: Password,
+                    profileImage: profileImage,
+                };
+
+        
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    UserData.profileImage = e.target.result;
+                    localStorage.setItem('UserData', JSON.stringify(UserData));
+                    alert('Registration successful!');
+                    window.location.href = "login.html";
+
+                    // Corrected function name
+                    displayImageDashboard(UserData.profileImage);
+                };
+
+                reader.readAsDataURL(profileImage);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url(imgs/3395620.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .form {
+            background-color: white;
+            opacity: 1;
+            padding: 20px;
+            border-radius: 8px;
+             box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;;
+            width: 300px;
+            animation: fadeIn 0.5s ease-out; /* Fade-in animation */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+            color: black;
+            font-weight: bold;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #004080;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.9;
+            }
+        }
+      
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="validateLogin(); return false;">
+            <!-- Use 'onsubmit' to call the validateLogin() function -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+
+            <input type="submit" value="Login">
+            <a href="register.html">Register</a>
+        </form>
+    </div>
+
+    <script>
+        function validateLogin() {
+            var name = document.getElementById('name').value;
+            var password = document.getElementById('password').value;
+    
+            var storage = localStorage.getItem('UserData');
+           
+           
+            if (storage) {
+                var userData = JSON.parse(storage);
+                
+    
+                if (name === userData.name && password === userData.password) {
+                    alert('Login successfully');
+                    
+                    sessionStorage.setItem('username', userData.name);
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert('Invalid Password.');
+                }
+            }
+        }
+    </script>
+    
+    
+</body>
+</html>
+
+
